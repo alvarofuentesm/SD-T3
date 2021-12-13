@@ -14,9 +14,9 @@ func leer_opt() rune { // Para leer numeros
 	}
 	return opt
 }
+
 func main() {
 	var playing = true
-	//var opt_user = ""
 	fmt.Println("Bienvenida Leia Organa")
 
 	planeta := ""
