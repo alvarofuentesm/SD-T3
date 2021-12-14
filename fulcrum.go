@@ -43,16 +43,17 @@ func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaRepl
 	if err != nil {
 		if os.IsNotExist(err) {
 			// Archivo no existe, crear uno
-			file, err = os.OpenFile(planeta+".txt", os.O_CREATE, 0666)
+			file, err = os.Create(planeta + ".txt")
+			//file, err = os.OpenFile(planeta+".txt", os.O_CREATE, 0666)
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
 	}
 	// Escribir los datos de la peticion al txt
-	str_to_write := planeta + " " + ciudad + " " + cant_rebels
-	bufferedWriter := bufio.NewWriter(file)
-	_, err = bufferedWriter.WriteString(str_to_write + "\n")
+	str_to_write := planeta + " " + ciudad + " " + cant_rebels + "\n"
+	//bufferedWriter := bufio.NewWriter(file)
+	_, err = file.WriteString(str_to_write)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -232,7 +233,7 @@ func startServer(isLocal bool) {
 	/*  Iniciar servidor Fulcrum */
 	fmt.Println("Iniciando servidor Fulcrum...")
 
-	if (isLocal == false) {
+	if isLocal == false {
 		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 8000))
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
@@ -263,7 +264,7 @@ func startServer(isLocal bool) {
 			log.Fatalf("failed to serve: %s", err)
 		}
 	}
-	
+
 }
 
 // para convertir un vector en formato string en slice de int
@@ -312,6 +313,7 @@ func updateVector(planeta string) string {
 
 var planet_dict = make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
 var numFulcrum int
+
 func main() {
 
 	argsWithoutProg := os.Args[1:]
