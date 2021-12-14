@@ -3,11 +3,11 @@ package t3;
 option go_package =  "./;t3";
 
 message Comando { // solicitu de Informates o Leia
-    string COMMAND = 1; // comando     
-    string planeta = 2; // nombre planeta  
-    string ciudad = 3; // nombre ciudad
-    string valor = 4; // valor de comando de existir, -1 en caso contrario
-    string vector = 5; // reloj vector, en caso de enviarlo
+    //string COMMAND = 1; // comando     
+    string planeta = 1; // nombre planeta  
+    string ciudad = 2; // nombre ciudad
+    string valor = 3; // valor de comando de existir, -1 en caso contrario
+    string vector = 4; // reloj vector, en caso de enviarlo
 }
   
 message RespuestaBroker { // respuesta del broker 

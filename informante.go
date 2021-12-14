@@ -94,12 +94,9 @@ func main() {
 	last_fulcrum := "" // ultimo servidor solicitado
 	fmt.Println(last_fulcrum)
 
-	planet_vector := make(map[string]string)
-	planet_vector["planetTest"] = "0 0 0"
+	planet_dict := make(map[string]string)
+	//planet_dict["planetTest"] = "0 0 0"
 	
-	test := convertStringVector(planet_vector["planetTest"])
-	fmt.Println(test)
-
 	loop:
 		for playing {
 
@@ -160,14 +157,76 @@ func main() {
 				rpta_final = comando + " " + planeta + " " + ciudad
 			}
 
-			fmt.Println("El comando que se enviará es:")
+			//fmt.Println("El comando que se enviará es:")
+			//message:= strings.Fields(rpta_final)
+			
 			fmt.Println(rpta_final)
 			fmt.Println("Enviando...")
 
+			// agregar planeta a dictionario
+			if _, ok := planet_dict[planeta]; ok {
+				test := convertStringVector(planet_dict[planeta])
+				fmt.Println(test)
+			}else{
+				planet_dict[planeta] = ""
+			}
+
 			// ENVIAR AL BROKER
-			// BROKER RESPONDE CON EL SERVIDOR ALEATORIO A DONDE ENVIARLO
+			fulcrum_IP := ""
+
+			switch comando {
+				case "AddCity":
+					response, err := c.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+					if err != nil {
+						log.Fatalf("Error when calling AddCity: %s", err)
+					}
+					log.Printf("Reponse: %s", response.IP)
+					fulcrum_IP = response.IP
+				
+				case "UpdateName":
+					response, err := c.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+					if err != nil {
+						log.Fatalf("Error when calling UpdateName: %s", err)
+					}
+					log.Printf("Reponse: %s", response.IP)
+					fulcrum_IP = response.IP
+				
+				case "UpdateNumber":
+					response, err := c.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+					if err != nil {
+						log.Fatalf("Error when calling UpdateNumber: %s", err)
+					}
+					log.Printf("Reponse: %s", response.IP)
+					fulcrum_IP = response.IP
+				
+				case "DeleteCity":
+					response, err := c.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: ""})
+					if err != nil {
+						log.Fatalf("Error when calling DeleteCity: %s", err)
+					}
+					log.Printf("Reponse: %s", response.IP)
+					fulcrum_IP = response.IP
+
+			}
+			
 			// ENVIAR AL SERVIDOR QUE EL BROKER ESCOGIO
 			// LA RPTA DEL SERVIDOR ES EL RELOJ DE VECTOR
+
+			// conectar con Fulcrum X
+			var conn *grpc.ClientConn
+			conn, err := grpc.Dial(fulcrum_IP + ":8000", grpc.WithInsecure())
+			if err != nil {
+				log.Fatalf("did not connect: %s", err)
+			}
+			defer conn.Close()
+
+			c_fulcrum := pb.NewFulcrumServiceClient(conn)
+			
+			response, err := c_fulcrum.SayHello(context.Background(), &pb.Message{Body: "TEST"})
+			if err != nil {
+				log.Fatalf("Error when calling SayHello: %s", err)
+			}
+			fmt.Println(&pb.Message{Body: response.Body})
 
 			// GUARDAR EL VECTOR, EL COMANDO FINAL Y LA DIRECCION DEL SERVER QUE SE CONECTO AL ULTIMO
 			// dice mantener en memoria y no entiendo a que se refiere
