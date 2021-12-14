@@ -112,6 +112,13 @@ func convertStringVector(string_vector string) []int {
 	return vector
 }
 
+// para convertir un vector de int en string con formato 0 0 0
+func convertIntVector(string_vector []int) string {
+	var vector string
+	vector = strconv.Itoa(string_vector[0]) + " " + strconv.Itoa(string_vector[1]) + " " + strconv.Itoa(string_vector[2])
+	return vector
+}
+
 var server_list = [3]string{"", "", ""}
 
 func main() {

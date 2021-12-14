@@ -58,18 +58,7 @@ func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaRepl
 	}
 	file.Close()
 
-	// UPDATE vector asociado al planeta
-
-	// key: name of planet, value: clock vector in format "0 0 0"
-	// agregar planeta a dictionario si no esta presenta
-	if _, ok := planet_dict[planeta]; ok {
-		test := convertStringVector(planet_dict[planeta])
-		fmt.Println(test)
-		// aqui UPDATE vector
-
-	} else {
-		planet_dict[planeta] = "0 0 0" // ESTO ESTA MAL, porque hay que hacerlo segun server, y ya sabemos en cual estamos
-	} 
+	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
 
 	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
 }
@@ -111,7 +100,9 @@ func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaR
 	}
 	// basicamente "se acabo el mundo pero inmediatamente después empezó otro mundo (casi) igual"
 
-	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
+	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
+
+	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
 }
 
 func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
@@ -146,7 +137,9 @@ func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.Respuest
 		os.Exit(1)
 	}
 
-	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
+	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
+
+	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
 }
 
 func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
@@ -179,7 +172,9 @@ func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaR
 		os.Exit(1)
 	}
 
-	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
+	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
+
+	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
 }
 
 func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
@@ -217,7 +212,9 @@ func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.Resp
 	// Enviarle la rpta al broker y que se lo pase a Leia
 	fmt.Println("La respuesta es:", rpta)
 
-	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
+	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
+
+	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil // AQUI VALOR DEBERIA SER LA VARIABLE rpta
 }
 
 // para que broker consulte los vectores
@@ -265,11 +262,39 @@ func convertStringVector(string_vector string) []int {
 	return vector
 }
 
+// para convertir un vector de int en string con formato 0 0 0
+func convertIntVector(string_vector []int) string {
+	var vector string
+	vector = strconv.Itoa(string_vector[0]) + " " + strconv.Itoa(string_vector[1]) + " " + strconv.Itoa(string_vector[2])
+	return vector
+}
+
+// para hacer la suma de vectores
+func updateVector(planeta string) string {
+	// Revisar el update segun server actual
+	aux_vector := make([]int, 3) // (0,0,0) base vector
+	aux_vector[numFulcrum] = 1
+	// Queda como (1,0,0) x ej
+	// eso se le suma a lo que ya hay en el dict
+
+	if _, ok := planet_dict[planeta]; ok {
+		int_old_vector := convertStringVector(planet_dict[planeta])
+		// sumar los dos arrays
+		new_vector := make([]int, 3)
+		for i := range new_vector {
+			new_vector[i] = aux_vector[i] + int_old_vector[i]
+		}
+		return convertIntVector(new_vector) // queda grabado como string "x y z"
+
+	} else {
+		return convertIntVector(aux_vector)
+	}
+}
+
 var planet_dict = make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
 var numFulcrum int
 
 func main() {
-
 
 	argsWithoutProg := os.Args[1:]
 
@@ -280,14 +305,13 @@ func main() {
 	if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "x" {
 		isCoordinator = true
 		numFulcrum = 0
-	}else if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "y" {
+	} else if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "y" {
 		numFulcrum = 1
-	}else if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "z" {
+	} else if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "z" {
 		numFulcrum = 2
 	}
 
 	log.Println(isLocal, isCoordinator)
-
 
 	go startServer()
 
