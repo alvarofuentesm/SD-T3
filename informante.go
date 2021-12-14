@@ -79,7 +79,6 @@ func main() {
 
 	c := pb.NewBrokerServiceClient(conn)
 	
-	// solicitar unirse al juego del calamar 
 	response, err := c.SayHello(context.Background(), &pb.Message{Body: "Hello World!"})
 	if err != nil {
 		log.Fatalf("Error when calling SayHello: %s", err)

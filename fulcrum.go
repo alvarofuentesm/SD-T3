@@ -74,8 +74,7 @@ func startServer(){
 
 	log.Println(isLocal, isCoordinator)
 
-
-
+	
 	/*  Iniciar servidor Fulcrum */
 	fmt.Println("Iniciando servidor Fulcrum...")
 
