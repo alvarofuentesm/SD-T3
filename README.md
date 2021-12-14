@@ -14,41 +14,41 @@ Formato: Proceso: Maquina - IP
 ## Leia: dist113 - 10.6.43.101
 
 ```
-make X
+make leia
 ```
 
 ## Fulcrum x: dist113 - 10.6.43.101
 
 ```
-make X
+make fulcrum
 ```
 
 ## Ahsoka: dist114 -10.6.43.102
 
 ```
-make X
+make info1
 ```
 
 ##  Fulcrum y: dist114 - 10.6.43.102
 
 ```
-make X
+make fulcrum
 ```
 
 ## Thrawn:  dist115 -10.6.43.103
 
 ```
-make X
+make info2
 ```
 
 ## Fulcrum z:  dist115 -10.6.43.103
 
 ```
-make X
+make fulcrum
 ```
 
 ## broker Mos Eisley: dist116 -10.6.43.104
 
 ```
-make X
+make broker
 ```
