@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 
-	//"math/rand"
+	"math/rand"
 	"log"
 	"net"
 	"os"
@@ -44,8 +44,18 @@ func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, err
 }
 
 func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
-	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
+	pick := ""
+	// en realidad siempre se ejecuta ese if
+	if (in.Vector == ""){ // primera consulta, se busca aleatorio
+		// Elegir aleatoriamente uno de los tres servidores
+		randomIndex := rand.Intn(len(server_list))
+		pick = server_list[randomIndex]
+		fmt.Println("El servidor elegido para la consulta es:", pick)
+		fmt.Println(pick)
+	}else{
+	}
+	
+	return &pb.RespuestaBroker{IP: pick, Vector: "", Valor: ""}, nil
 }
 
 func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
@@ -119,7 +129,8 @@ func convertIntVector(string_vector []int) string {
 	return vector
 }
 
-var server_list = [3]string{"", "", ""}
+var server_list = [3]string{":8000", ":8100", ":8200"}
+//var server_list = [3]string{":8000", ":8000", ":8000"}
 
 func main() {
 	//var listening = true

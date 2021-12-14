@@ -212,7 +212,7 @@ loop:
 
 		// conectar con Fulcrum X
 		var conn *grpc.ClientConn
-		conn, err := grpc.Dial(fulcrum_IP+":8000", grpc.WithInsecure())
+		conn, err := grpc.Dial(fulcrum_IP, grpc.WithInsecure())
 		if err != nil {
 			log.Fatalf("did not connect: %s", err)
 		}
