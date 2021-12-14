@@ -4,6 +4,8 @@ import (
 	//"bufio"
 	"fmt"
 	//"os"
+	"strings"
+	"strconv"
 	pb "github.com/alvarofuentesm/SD-T3/proto"
 	"log"
 	"net"
@@ -24,33 +26,33 @@ func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, err
 
 func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaReplica{Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaReplica{Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaReplica{Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaReplica{Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaReplica{Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
 }
 
 // para que broker consulte los vectores
 func (s *Server) GetClockVector(ctx context.Context, in *pb.Message) (*pb.RespuestaReplica, error) {
 	log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaReplica{Vector: "0,0,0"}, nil
+	return &pb.RespuestaReplica{Vector: "0 0 0"}, nil
 }
 
 /*************************************************************************************/

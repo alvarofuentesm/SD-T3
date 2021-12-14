@@ -5,7 +5,8 @@ import (
 	"fmt"
 	//"math/rand"
 	"os"
-	//"strings"
+	"strings"
+	"strconv"
 	pb "github.com/alvarofuentesm/SD-T3/proto"
 	"log"
 	"net"
@@ -42,27 +43,27 @@ func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, err
 
 func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
 }
 
 func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
 }
 
 
