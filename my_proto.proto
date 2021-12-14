@@ -1,72 +1,51 @@
 syntax = "proto3";
-package t2;
-option go_package =  "./;t2";
+package t3;
+option go_package =  "./;t3";
 
-message Solicitud {
-    string IP = 1;   // IP de jugador  
-    string PORT = 2;  // puerto jugador
+message Comando { // solicitu de Informates o Leia
+    string COMMAND = 1; // comando     
+    string planeta = 2; // nombre planeta  
+    string ciudad = 3; // nombre ciudad
+    string valor = 4; // valor de comando de existir, -1 en caso contrario
 }
   
-message RespuestaSolicitud { // se usa varias veces por su campo ID
-    int32 ID = 1; // ID
+message RespuestaBroker { // respuesta del broker 
+    string IP = 1; // IP del Fulcrum 
+    string vector_clock = 2; // reloj vector (para Leia) 
+    string valor = 3; // reloj vector (para Leia) 
+}
+
+message RespuestaReplica { // respuesta replica Fulcrum
+    string vector_clock = 1; // reloj vector
+    string valor = 2; // valor solicitado (por Leia) 
 }
 
 message Message {
     string body = 1;
 }
 
-message Jugada {
-    int32 ID = 1;
-    string numero = 2;
-}
-
-message ResultadoJugada {
-    bool vivo = 1;
-    bool NEXTETAPA = 2;
-    bool WAIT = 3; // flag esperar a otros jugadores
-}
-
-message InfoJugada{
-    int32 ID = 1;
-	string etapa = 2;
-	string jugada = 3;
-	string ronda = 4; // RONDA SOLO SE MANDA EN ETAPA 1 o de lo contrario mandar siempre con valor 0 
-}
-
-// Interface exported by the server (Lider)
-service LiderService {
+// Interface exported by the server (Broker)
+service BrokerService {
     // Simple rpc
-    rpc Unirse(Solicitud) returns (RespuestaSolicitud) {} // unirse al juego
     rpc SayHello(Message) returns (Message) {} // para debug
     
-    // etapas
-    rpc ProcesarJugada(Jugada) returns (Message) {} // procesar jugada en Lider de etapa 1
-    rpc ProcesarJugadaDos(Jugada) returns (Message) {} // procesar jugada en Lider de etapa 2
-    rpc ProcesarJugadaTres(Jugada) returns (Message) {} // procesar jugada en Lider de etapa 3
+    rpc AddCity(Comando) returns (RespuestaBroker) {} 
+    rpc UpdateName(Comando) returns (RespuestaBroker) {} 
+    rpc UpdateNumber(Comando) returns (RespuestaBroker) {} 
+    rpc DeleteCity(Comando) returns (RespuestaBroker) {} 
 
-    rpc GetResultadosRonda(RespuestaSolicitud) returns (ResultadoJugada) {} // obtener resultado de ronda (etapa 1)
-
-    rpc NotificarEstado(RespuestaSolicitud) returns (Message) {} // notificar estado (OK, MUERTO)
-
-    rpc EmpezarEtapa(Message) returns (Message) {} // para que esperen los jugadores a que empiece la suguiente etapa
-
-    rpc ConsultarMontoAcumulado(Message) returns (Message) {} // jugador -> lider
+    rpc GetNumberRebelds(Comando) returns (RespuestaBroker) {}
 }
 
-// Interface exported by the server (Pozo)
-service PozoService {
-    rpc ConsultarMontoAcumulado(Message) returns (Message) {} // lider -> pozo
+// Interface exported by the server (Fulcrum)
+service FulcrumService {
+    // Simple rpc
+    rpc SayHello(Message) returns (Message) {} // para debug
+    
+    rpc AddCity(Comando) returns (RespuestaReplica) {} 
+    rpc UpdateName(Comando) returns (RespuestaReplica) {} 
+    rpc UpdateNumber(Comando) returns (RespuestaReplica) {} 
+    rpc DeleteCity(Comando) returns (RespuestaReplica) {} 
+    
+    rpc GetNumberRebelds(Comando) returns (RespuestaReplica) {}
 }
-
-// Interface exported by the server (NameNode)
-service NameNodeService {
-    rpc RegistrarJugada(InfoJugada) returns (Message) {}
-    rpc ConsultarJugada(RespuestaSolicitud) returns (Message) {}
-}
-
-// Interface exported by the server (DataNode)
-service DataNodeService {
-    rpc RegistrarJugada(InfoJugada) returns (Message) {}
-    rpc ConsultarJugada(RespuestaSolicitud) returns (Message) {}
-}
-
