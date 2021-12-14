@@ -264,6 +264,7 @@ loop:
 		last_fulcrum = fulcrum_IP
 
 		// ---------- SEGUIR EJECUTANDO ----------
+		/*
 		fmt.Println("¿Desea seguir enviando comandos?:")
 		fmt.Println("1. Si")
 		fmt.Println("2. No")
@@ -280,5 +281,6 @@ loop:
 		default:
 			fmt.Println("Respuesta no valida")
 		}
+		*/
 	}
 }
