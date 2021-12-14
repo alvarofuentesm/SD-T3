@@ -227,24 +227,43 @@ func (s *Server) GetClockVector(ctx context.Context, in *pb.Message) (*pb.Respue
 var isLocal = false       // proceso corriendo localmente (no en VM's)
 var isCoordinator = false // proceso es coordinador
 
-func startServer() {
+func startServer(isLocal bool) {
 
 	/*  Iniciar servidor Fulcrum */
 	fmt.Println("Iniciando servidor Fulcrum...")
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 8000))
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	} else {
-		log.Printf("... listen exitoso")
-	}
+	if (isLocal == false) {
+		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 8000))
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		} else {
+			log.Printf("... listen exitoso")
+		}
 
-	s := Server{}
-	grpcServer := grpc.NewServer()
-	pb.RegisterFulcrumServiceServer(grpcServer, &s)
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %s", err)
+		s := Server{}
+		grpcServer := grpc.NewServer()
+		pb.RegisterFulcrumServiceServer(grpcServer, &s)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %s", err)
+		}
+	} else {
+		fmt.Println("Iniciando servidor localmente")
+		var possible_ports = [3]int{8000, 8100, 8200}
+		lis, err := net.Listen("tcp", fmt.Sprintf(":%d", possible_ports[numFulcrum]))
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		} else {
+			log.Printf("... listen exitoso")
+		}
+
+		s := Server{}
+		grpcServer := grpc.NewServer()
+		pb.RegisterFulcrumServiceServer(grpcServer, &s)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("failed to serve: %s", err)
+		}
 	}
+	
 }
 
 // para convertir un vector en formato string en slice de int
@@ -293,10 +312,11 @@ func updateVector(planeta string) string {
 
 var planet_dict = make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
 var numFulcrum int
-
 func main() {
 
 	argsWithoutProg := os.Args[1:]
+
+	isLocal = false
 
 	if len(argsWithoutProg) > 0 && argsWithoutProg[0] == "L" {
 		isLocal = true
@@ -313,7 +333,7 @@ func main() {
 
 	log.Println(isLocal, isCoordinator)
 
-	go startServer()
+	go startServer(isLocal)
 
 	for {
 	}
