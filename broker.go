@@ -21,9 +21,52 @@ type Server struct {
 // funcion response hello para debug
 func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, error) {
 	log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.Message{Body: "Hello From the Server!"}, nil
+
+	// conectar con Fulcrum X
+	var conn *grpc.ClientConn
+	conn, err := grpc.Dial(":8000", grpc.WithInsecure())
+	//conn, err := grpc.Dial("X.X.XX.XXX:8000", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %s", err)
+	}
+	defer conn.Close()
+
+	c_fulcrum := pb.NewFulcrumServiceClient(conn)
+	
+	response, err := c_fulcrum.SayHello(context.Background(), &pb.Message{Body: "TEST"})
+	if err != nil {
+		log.Fatalf("Error when calling SayHello: %s", err)
+	}
+	return &pb.Message{Body: response.Body}, nil
 }
 
+func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
+	//log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+}
+
+func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
+	//log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+}
+
+func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
+	//log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+}
+
+func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
+	//log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+}
+
+func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
+	//log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.RespuestaBroker{IP: "", Vector: "0,0,0", Valor: ""}, nil
+}
+
+
+/*************************************************************************************/
 func leer_opt() rune { // Para leer numeros
 	reader := bufio.NewReader(os.Stdin)
 	opt, _, err := reader.ReadRune()

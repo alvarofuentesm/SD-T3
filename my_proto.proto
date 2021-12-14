@@ -11,12 +11,12 @@ message Comando { // solicitu de Informates o Leia
   
 message RespuestaBroker { // respuesta del broker 
     string IP = 1; // IP del Fulcrum 
-    string vector_clock = 2; // reloj vector (para Leia) 
+    string vector = 2; // reloj vector (para Leia) 
     string valor = 3; // reloj vector (para Leia) 
 }
 
 message RespuestaReplica { // respuesta replica Fulcrum
-    string vector_clock = 1; // reloj vector
+    string vector = 1; // reloj vector
     string valor = 2; // valor solicitado (por Leia) 
 }
 
