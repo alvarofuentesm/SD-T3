@@ -58,7 +58,20 @@ func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaRepl
 	}
 	file.Close()
 
-	return &pb.RespuestaReplica{Vector: "0 0 0", Valor: ""}, nil
+	// UPDATE vector asociado al planeta
+
+	// key: name of planet, value: clock vector in format "0 0 0"
+	// agregar planeta a dictionario si no esta presenta
+	if _, ok := planet_dict[planeta]; ok {
+		test := convertStringVector(planet_dict[planeta])
+		fmt.Println(test)
+		// aqui UPDATE vector
+
+	} else {
+		planet_dict[planeta] = "0 0 0" // ESTO ESTA MAL, porque hay que hacerlo segun server, y ya sabemos en cual estamos
+	} 
+
+	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
 }
 
 func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaReplica, error) {
@@ -219,18 +232,6 @@ var isCoordinator = false // proceso es coordinador
 
 func startServer() {
 
-	argsWithoutProg := os.Args[1:]
-
-	if len(argsWithoutProg) > 0 && argsWithoutProg[0] == "L" {
-		isLocal = true
-	}
-
-	if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "x" {
-		isCoordinator = true
-	}
-
-	log.Println(isLocal, isCoordinator)
-
 	/*  Iniciar servidor Fulcrum */
 	fmt.Println("Iniciando servidor Fulcrum...")
 
@@ -265,8 +266,28 @@ func convertStringVector(string_vector string) []int {
 }
 
 var planet_dict = make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
+var numFulcrum int
 
 func main() {
+
+
+	argsWithoutProg := os.Args[1:]
+
+	if len(argsWithoutProg) > 0 && argsWithoutProg[0] == "L" {
+		isLocal = true
+	}
+
+	if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "x" {
+		isCoordinator = true
+		numFulcrum = 0
+	}else if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "y" {
+		numFulcrum = 1
+	}else if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "z" {
+		numFulcrum = 2
+	}
+
+	log.Println(isLocal, isCoordinator)
+
 
 	go startServer()
 
