@@ -4,6 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	pb "github.com/alvarofuentesm/SD-T3/proto"
+	"log"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
 )
 
 func leer_opt() rune { // Para leer numeros
@@ -47,6 +51,24 @@ func main() {
 
 	
 	fmt.Println("Saludos, ", nombre)
+
+	var conn *grpc.ClientConn
+	conn, err := grpc.Dial(":9000", grpc.WithInsecure())
+	//conn, err = grpc.Dial("XX.X.XX.XXX:9000", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %s", err)
+	}
+	defer conn.Close()
+
+	c := pb.NewBrokerServiceClient(conn)
+	
+	// solicitar unirse al juego del calamar 
+	response, err := c.SayHello(context.Background(), &pb.Message{Body: "Hello World!"})
+	if err != nil {
+		log.Fatalf("Error when calling SayHello: %s", err)
+	}
+	log.Printf("Reponse: %s", response.Body)
+
 
 	comando := ""
 	planeta := ""

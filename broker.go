@@ -3,10 +3,26 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math/rand"
+	//"math/rand"
 	"os"
-	"strings"
+	//"strings"
+	pb "github.com/alvarofuentesm/SD-T3/proto"
+	"log"
+	"net"
+	"google.golang.org/grpc"
+	"golang.org/x/net/context"
 )
+
+/********************************** gRPC **********************************************/
+type Server struct {
+	pb.UnimplementedBrokerServiceServer
+}
+
+// funcion response hello para debug
+func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, error) {
+	log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.Message{Body: "Hello From the Server!"}, nil
+}
 
 func leer_opt() rune { // Para leer numeros
 	reader := bufio.NewReader(os.Stdin)
@@ -17,10 +33,32 @@ func leer_opt() rune { // Para leer numeros
 	return opt
 }
 
+func startServer(){
+	/*  Iniciar servidor Lider */
+	fmt.Println("Iniciando servidor Broker...")
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 9000))
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}else{
+		log.Printf("... listen exitoso")
+	}
+
+	s := Server{}
+	grpcServer := grpc.NewServer()
+	pb.RegisterBrokerServiceServer(grpcServer, &s)
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %s", err)
+	}
+}
+
 func main() {
-	var listening = true
+	//var listening = true
 	fmt.Println("Bienvenido al broker Mos Eisley")
 
+	go startServer()
+
+	/*
 	server_list := []int{1, 2, 3} // Deberian ir las direcciones de los server
 
 	for listening {
@@ -64,6 +102,10 @@ func main() {
 			fmt.Println("Respuesta no valida")
 		}
 	}
+	*/
+	for { 
+	}
+
 
 	//
 }
