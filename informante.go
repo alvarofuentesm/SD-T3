@@ -174,7 +174,7 @@ loop:
 
 		switch comando {
 		case "AddCity":
-			response, err := c.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: planet_dict[planeta]})
+			response, err := c.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: planet_dict[planeta], Last: last_fulcrum})
 			if err != nil {
 				log.Fatalf("Error when calling AddCity: %s", err)
 			}
@@ -182,7 +182,7 @@ loop:
 			fulcrum_IP = response.IP
 
 		case "UpdateName":
-			response, err := c.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: planet_dict[planeta]})
+			response, err := c.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: planet_dict[planeta], Last: last_fulcrum})
 			if err != nil {
 				log.Fatalf("Error when calling UpdateName: %s", err)
 			}
@@ -190,7 +190,7 @@ loop:
 			fulcrum_IP = response.IP
 
 		case "UpdateNumber":
-			response, err := c.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: planet_dict[planeta]})
+			response, err := c.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: planet_dict[planeta], Last: last_fulcrum})
 			if err != nil {
 				log.Fatalf("Error when calling UpdateNumber: %s", err)
 			}
@@ -198,7 +198,7 @@ loop:
 			fulcrum_IP = response.IP
 
 		case "DeleteCity":
-			response, err := c.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: planet_dict[planeta]})
+			response, err := c.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: planet_dict[planeta], Last: last_fulcrum})
 			if err != nil {
 				log.Fatalf("Error when calling DeleteCity: %s", err)
 			}
@@ -260,6 +260,8 @@ loop:
 		// guardar vector
 		planet_dict[planeta] = response_vector
 		fmt.Println(convertStringVector(planet_dict[planeta]))
+
+		last_fulcrum = fulcrum_IP
 
 		// ---------- SEGUIR EJECUTANDO ----------
 		fmt.Println("¿Desea seguir enviando comandos?:")

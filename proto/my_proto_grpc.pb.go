@@ -293,6 +293,7 @@ type FulcrumServiceClient interface {
 	UpdateNumber(ctx context.Context, in *Comando, opts ...grpc.CallOption) (*RespuestaReplica, error)
 	DeleteCity(ctx context.Context, in *Comando, opts ...grpc.CallOption) (*RespuestaReplica, error)
 	GetNumberRebelds(ctx context.Context, in *Comando, opts ...grpc.CallOption) (*RespuestaReplica, error)
+	// Message contendra el nombre del planeta
 	GetClockVector(ctx context.Context, in *Message, opts ...grpc.CallOption) (*RespuestaReplica, error)
 }
 
@@ -378,6 +379,7 @@ type FulcrumServiceServer interface {
 	UpdateNumber(context.Context, *Comando) (*RespuestaReplica, error)
 	DeleteCity(context.Context, *Comando) (*RespuestaReplica, error)
 	GetNumberRebelds(context.Context, *Comando) (*RespuestaReplica, error)
+	// Message contendra el nombre del planeta
 	GetClockVector(context.Context, *Message) (*RespuestaReplica, error)
 	mustEmbedUnimplementedFulcrumServiceServer()
 }

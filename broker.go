@@ -59,23 +59,103 @@ func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBrok
 }
 
 func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
-	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
+	pick := ""
+	// al last_fulcrum o al de mayores cambios
+	last_fulcrum:= in.Last // IP
+	vector := convertStringVector(in.Vector) // (1,3,0)
+
+	//consulto a servidor last_fulcrum su vectorFulcrum
+	var conn *grpc.ClientConn
+	conn, err := grpc.Dial(last_fulcrum, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %s", err)
+	}
+	defer conn.Close()
+
+	c_fulcrum := pb.NewFulcrumServiceClient(conn)
+
+	response, err := c_fulcrum.GetClockVector(context.Background(), &pb.Message{Body: in.Planeta})
+	if err != nil {
+		log.Fatalf("Error when calling GetClockVector: %s", err)
+	}
+	log.Println(response.Vector)
+
+	// buscar posicion del fulcrum
+	position := 0
+	for i := 0; i < 3; i++ {
+		if (server_list[i] == last_fulcrum){
+			position = i
+		}
+	}
+
+	flag := false
+	vectorFulcrum := make([]int, 3)
+	if (response.Vector == ""){ // vacio, no existe el planeta en el servidor
+		flag = true
+	} else{
+		vectorFulcrum = convertStringVector(response.Vector)
+	}
+
+	//comparar el vectorFulcrum con vector de cliente
+	if ( flag || vector[position] < vectorFulcrum[position] ){
+		vector_list := make([]string, 3)
+
+		for i := 0; i < 3; i++ {
+			var conn *grpc.ClientConn
+			conn, err := grpc.Dial(server_list[i], grpc.WithInsecure())
+			if err != nil {
+				log.Fatalf("did not connect: %s", err)
+			}
+			defer conn.Close()
+
+			c_fulcrum := pb.NewFulcrumServiceClient(conn)
+			
+			response, err := c_fulcrum.GetClockVector(context.Background(), &pb.Message{Body: in.Planeta})
+			if err != nil {
+				log.Fatalf("Error when calling GetClockVector: %s", err)
+			}
+			vector_list[i] = response.Vector
+		}
+
+		// asignar al que tenga el mayor valor de su vector
+		max_value := 0 
+		max_position:= 0
+		for i := 0; i < 3; i++ {
+
+			log.Println(vector_list)
+			log.Println(vector_list[i])
+
+			if (vector_list[i] == "") {
+				continue
+			}
+			
+			aux := convertStringVector(vector_list[i])[position]
+			if (aux >= max_value) {
+				max_value = aux
+				max_position = i
+			}
+		}
+		pick = server_list[max_position]
+
+	}else{
+		pick = last_fulcrum
+	}
+	return &pb.RespuestaBroker{IP: pick, Vector: "", Valor: ""}, nil
 }
 
 func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "", Valor: ""}, nil
 }
 
 func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "", Valor: ""}, nil
 }
 
 func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.RespuestaBroker, error) {
 	//log.Printf("Receive message body from client: %s", in.Body)
-	return &pb.RespuestaBroker{IP: "", Vector: "0 0 0", Valor: ""}, nil
+	return &pb.RespuestaBroker{IP: "", Vector: "", Valor: ""}, nil
 }
 
 /*************************************************************************************/

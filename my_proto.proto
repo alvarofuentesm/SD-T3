@@ -8,6 +8,7 @@ message Comando { // solicitu de Informates o Leia
     string ciudad = 2; // nombre ciudad
     string valor = 3; // valor de comando de existir, -1 en caso contrario
     string vector = 4; // reloj vector, en caso de enviarlo
+    string last = 5; // last IP fulcrum 
 }
   
 message RespuestaBroker { // respuesta del broker 
