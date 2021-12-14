@@ -175,7 +175,7 @@ func main() {
 
 			switch comando {
 				case "AddCity":
-					response, err := c.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+					response, err := c.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector:  planet_dict[planeta]})
 					if err != nil {
 						log.Fatalf("Error when calling AddCity: %s", err)
 					}
@@ -183,7 +183,7 @@ func main() {
 					fulcrum_IP = response.IP
 				
 				case "UpdateName":
-					response, err := c.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+					response, err := c.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector:  planet_dict[planeta]})
 					if err != nil {
 						log.Fatalf("Error when calling UpdateName: %s", err)
 					}
@@ -191,7 +191,7 @@ func main() {
 					fulcrum_IP = response.IP
 				
 				case "UpdateNumber":
-					response, err := c.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+					response, err := c.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector:  planet_dict[planeta]})
 					if err != nil {
 						log.Fatalf("Error when calling UpdateNumber: %s", err)
 					}
@@ -199,7 +199,7 @@ func main() {
 					fulcrum_IP = response.IP
 				
 				case "DeleteCity":
-					response, err := c.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: ""})
+					response, err := c.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector:  planet_dict[planeta]})
 					if err != nil {
 						log.Fatalf("Error when calling DeleteCity: %s", err)
 					}
@@ -225,7 +225,7 @@ func main() {
 			
 			switch comando {
 			case "AddCity":
-				response, err := c_fulcrum.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+				response, err := c_fulcrum.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector:  planet_dict[planeta]})
 				if err != nil {
 					log.Fatalf("Error when calling AddCity: %s", err)
 				}
@@ -233,7 +233,7 @@ func main() {
 				response_vector = response.Vector
 			
 			case "UpdateName":
-				response, err := c_fulcrum.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+				response, err := c_fulcrum.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector:  planet_dict[planeta]})
 				if err != nil {
 					log.Fatalf("Error when calling UpdateName: %s", err)
 				}
@@ -241,7 +241,7 @@ func main() {
 				response_vector = response.Vector
 			
 			case "UpdateNumber":
-				response, err := c_fulcrum.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+				response, err := c_fulcrum.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector:  planet_dict[planeta]})
 				if err != nil {
 					log.Fatalf("Error when calling UpdateNumber: %s", err)
 				}
@@ -249,7 +249,7 @@ func main() {
 				response_vector = response.Vector
 			
 			case "DeleteCity":
-				response, err := c_fulcrum.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: ""})
+				response, err := c_fulcrum.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector:  planet_dict[planeta]})
 				if err != nil {
 					log.Fatalf("Error when calling DeleteCity: %s", err)
 				}
