@@ -30,6 +30,7 @@ func main() {
 		// llega una
 		peticion := ""
 
+		// Elegir aleatoriamente uno de los tres servidores
 		randomIndex := rand.Intn(len(server_list))
 		pick := server_list[randomIndex]
 		fmt.Println("El servidor elegido para la consulta es:", pick)

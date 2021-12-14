@@ -18,8 +18,8 @@ func leer_opt() rune { // Para leer numeros
 func main() {
 	var playing = true
 	fmt.Println("Bienvenido informante, elija el numero de su nombre:")
-	fmt.Println("1. Ahsoka Tano")
-	fmt.Println("2. Almirante Thrawn")
+	fmt.Println("1. (dist114) Ahsoka Tano")
+	fmt.Println("2. (dist115) Almirante Thrawn")
 
 	opt_user := leer_opt()
 	nombre := ""
