@@ -293,6 +293,7 @@ type FulcrumServiceClient interface {
 	UpdateNumber(ctx context.Context, in *Comando, opts ...grpc.CallOption) (*RespuestaReplica, error)
 	DeleteCity(ctx context.Context, in *Comando, opts ...grpc.CallOption) (*RespuestaReplica, error)
 	GetNumberRebelds(ctx context.Context, in *Comando, opts ...grpc.CallOption) (*RespuestaReplica, error)
+	GetClockVector(ctx context.Context, in *Message, opts ...grpc.CallOption) (*RespuestaReplica, error)
 }
 
 type fulcrumServiceClient struct {
@@ -357,6 +358,15 @@ func (c *fulcrumServiceClient) GetNumberRebelds(ctx context.Context, in *Comando
 	return out, nil
 }
 
+func (c *fulcrumServiceClient) GetClockVector(ctx context.Context, in *Message, opts ...grpc.CallOption) (*RespuestaReplica, error) {
+	out := new(RespuestaReplica)
+	err := c.cc.Invoke(ctx, "/t3.FulcrumService/GetClockVector", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FulcrumServiceServer is the server API for FulcrumService service.
 // All implementations must embed UnimplementedFulcrumServiceServer
 // for forward compatibility
@@ -368,6 +378,7 @@ type FulcrumServiceServer interface {
 	UpdateNumber(context.Context, *Comando) (*RespuestaReplica, error)
 	DeleteCity(context.Context, *Comando) (*RespuestaReplica, error)
 	GetNumberRebelds(context.Context, *Comando) (*RespuestaReplica, error)
+	GetClockVector(context.Context, *Message) (*RespuestaReplica, error)
 	mustEmbedUnimplementedFulcrumServiceServer()
 }
 
@@ -392,6 +403,9 @@ func (UnimplementedFulcrumServiceServer) DeleteCity(context.Context, *Comando) (
 }
 func (UnimplementedFulcrumServiceServer) GetNumberRebelds(context.Context, *Comando) (*RespuestaReplica, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetNumberRebelds not implemented")
+}
+func (UnimplementedFulcrumServiceServer) GetClockVector(context.Context, *Message) (*RespuestaReplica, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetClockVector not implemented")
 }
 func (UnimplementedFulcrumServiceServer) mustEmbedUnimplementedFulcrumServiceServer() {}
 
@@ -514,6 +528,24 @@ func _FulcrumService_GetNumberRebelds_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FulcrumService_GetClockVector_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Message)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FulcrumServiceServer).GetClockVector(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/t3.FulcrumService/GetClockVector",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FulcrumServiceServer).GetClockVector(ctx, req.(*Message))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FulcrumService_ServiceDesc is the grpc.ServiceDesc for FulcrumService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -544,6 +576,10 @@ var FulcrumService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetNumberRebelds",
 			Handler:    _FulcrumService_GetNumberRebelds_Handler,
+		},
+		{
+			MethodName: "GetClockVector",
+			Handler:    _FulcrumService_GetClockVector_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

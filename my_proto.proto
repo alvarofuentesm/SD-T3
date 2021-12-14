@@ -50,5 +50,5 @@ service FulcrumService {
     
     rpc GetNumberRebelds(Comando) returns (RespuestaReplica) {}
 
-    rpc GetClockVector() returns (RespuestaReplica) {} // para que broker consulte los vectores
+    rpc GetClockVector(Message) returns (RespuestaReplica) {} // para que broker consulte los vectores
 }
