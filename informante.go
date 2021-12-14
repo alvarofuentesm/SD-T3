@@ -222,12 +222,37 @@ func main() {
 
 			c_fulcrum := pb.NewFulcrumServiceClient(conn)
 			
-			response, err := c_fulcrum.SayHello(context.Background(), &pb.Message{Body: "TEST"})
-			if err != nil {
-				log.Fatalf("Error when calling SayHello: %s", err)
-			}
-			fmt.Println(&pb.Message{Body: response.Body})
+			switch comando {
+			case "AddCity":
+				response, err := c_fulcrum.AddCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+				if err != nil {
+					log.Fatalf("Error when calling AddCity: %s", err)
+				}
+				log.Printf("Reponse: ", response)
+			
+			case "UpdateName":
+				response, err := c_fulcrum.UpdateName(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+				if err != nil {
+					log.Fatalf("Error when calling UpdateName: %s", err)
+				}
+				log.Printf("Reponse: ", response)
+			
+			case "UpdateNumber":
+				response, err := c_fulcrum.UpdateNumber(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: nuevo_valor, Vector: ""})
+				if err != nil {
+					log.Fatalf("Error when calling UpdateNumber: %s", err)
+				}
+				log.Printf("Reponse: ", response)
+			
+			case "DeleteCity":
+				response, err := c_fulcrum.DeleteCity(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: ""})
+				if err != nil {
+					log.Fatalf("Error when calling DeleteCity: %s", err)
+				}
+				log.Printf("Reponse: ", response)
 
+			}
+			
 			// GUARDAR EL VECTOR, EL COMANDO FINAL Y LA DIRECCION DEL SERVER QUE SE CONECTO AL ULTIMO
 			// dice mantener en memoria y no entiendo a que se refiere
 			// mantenerlo en un dict? en un txt? se deberia reiniciar cada vez que se ejecuta este script?? aaaaaaa
