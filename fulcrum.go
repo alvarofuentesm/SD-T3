@@ -47,6 +47,11 @@ func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.Resp
 	return &pb.RespuestaReplica{Vector: "0,0,0", Valor: ""}, nil
 }
 
+// para que broker consulte los vectores
+func (s *Server) GetClockVector(ctx context.Context, in *pb.Message) (*pb.RespuestaReplica, error) {
+	log.Printf("Receive message body from client: %s", in.Body)
+	return &pb.RespuestaReplica{Vector: "0,0,0"}, nil
+}
 
 /*************************************************************************************/
 
