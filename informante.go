@@ -94,7 +94,7 @@ func main() {
 	last_fulcrum := "" // ultimo servidor solicitado
 	fmt.Println(last_fulcrum)
 
-	planet_dict := make(map[string]string)
+	planet_dict := make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
 	//planet_dict["planetTest"] = "0 0 0"
 	
 	loop:

@@ -92,6 +92,8 @@ func convertStringVector(string_vector string) []int{
 	return vector
 }
 
+var planet_dict = make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
+
 func main() {
 
 	go startServer()
