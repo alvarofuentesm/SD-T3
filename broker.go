@@ -95,6 +95,21 @@ func startServer(){
 	}
 }
 
+// para convertir un vector en formato string en slice de int
+func convertStringVector(string_vector string) []int{
+	var vector []int
+	aux := strings.Fields(string_vector)
+
+	for i := 0; i < 3; i++ {
+		number, err := strconv.Atoi(aux[i])
+		if err != nil {
+			fmt.Println(err)
+		}
+		vector = append(vector, number)
+	}
+	return vector
+}
+
 var server_list = [3]string{"", "", ""}
 
 func main() {

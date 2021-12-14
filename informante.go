@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
+	"strconv"
 	pb "github.com/alvarofuentesm/SD-T3/proto"
 	"log"
 	"golang.org/x/net/context"
@@ -17,6 +19,21 @@ func leer_opt() rune { // Para leer numeros
 		fmt.Println(err)
 	}
 	return opt
+}
+
+// para convertir un vector en formato string en slice de int
+func convertStringVector(string_vector string) []int{
+	var vector []int
+	aux := strings.Fields(string_vector)
+
+	for i := 0; i < 3; i++ {
+		number, err := strconv.Atoi(aux[i])
+		if err != nil {
+			fmt.Println(err)
+		}
+		vector = append(vector, number)
+	}
+	return vector
 }
 
 func main() {
@@ -69,11 +86,19 @@ func main() {
 	}
 	log.Printf("Reponse: %s", response.Body)
 
-
 	comando := ""
 	planeta := ""
 	ciudad := ""
 	nuevo_valor := ""
+
+	last_fulcrum := "" // ultimo servidor solicitado
+	fmt.Println(last_fulcrum)
+
+	planet_vector := make(map[string]string)
+	planet_vector["planetTest"] = "0 0 0"
+	
+	test := convertStringVector(planet_vector["planetTest"])
+	fmt.Println(test)
 
 	loop:
 		for playing {
