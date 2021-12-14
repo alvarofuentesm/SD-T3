@@ -95,11 +95,16 @@ func startServer(){
 	}
 }
 
+var server_list = [3]string{"", "", ""}
+
 func main() {
 	//var listening = true
 	fmt.Println("Bienvenido al broker Mos Eisley")
 
 	go startServer()
+	
+	for { 
+	}
 
 	/*
 	server_list := []int{1, 2, 3} // Deberian ir las direcciones de los server
@@ -146,9 +151,7 @@ func main() {
 		}
 	}
 	*/
-	for { 
-	}
+	
 
 
-	//
 }

@@ -7,6 +7,7 @@ message Comando { // solicitu de Informates o Leia
     string planeta = 2; // nombre planeta  
     string ciudad = 3; // nombre ciudad
     string valor = 4; // valor de comando de existir, -1 en caso contrario
+    string vector = 5; // reloj vector, en caso de enviarlo
 }
   
 message RespuestaBroker { // respuesta del broker 
@@ -48,4 +49,6 @@ service FulcrumService {
     rpc DeleteCity(Comando) returns (RespuestaReplica) {} 
     
     rpc GetNumberRebelds(Comando) returns (RespuestaReplica) {}
+
+    rpc GetClockVector() returns (RespuestaReplica) {} // para que broker consulte los vectores
 }
