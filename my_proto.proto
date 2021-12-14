@@ -50,5 +50,6 @@ service FulcrumService {
     
     rpc GetNumberRebelds(Comando) returns (RespuestaReplica) {}
 
+                                                              // Message contendra el nombre del planeta
     rpc GetClockVector(Message) returns (RespuestaReplica) {} // para que broker consulte los vectores
 }
