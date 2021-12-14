@@ -3,7 +3,7 @@ package main
 import (
 	//"bufio"
 	"fmt"
-	//"os"
+	"os"
 	"strings"
 	"strconv"
 	pb "github.com/alvarofuentesm/SD-T3/proto"
@@ -56,10 +56,27 @@ func (s *Server) GetClockVector(ctx context.Context, in *pb.Message) (*pb.Respue
 }
 
 /*************************************************************************************/
-
+var isLocal = false // proceso corriendo localmente (no en VM's)
+var isCoordinator = false // proceso es coordinador 
 
 func startServer(){
-	/*  Iniciar servidor Lider */
+
+	argsWithoutProg := os.Args[1:]
+
+	
+	if len(argsWithoutProg) > 0 && argsWithoutProg[0] == "L" {
+		isLocal =  true
+	}
+
+	if len(argsWithoutProg) > 1 && argsWithoutProg[1] == "x" {
+		isCoordinator =  true
+	}
+
+	log.Println(isLocal, isCoordinator)
+
+
+
+	/*  Iniciar servidor Fulcrum */
 	fmt.Println("Iniciando servidor Fulcrum...")
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", 8000))

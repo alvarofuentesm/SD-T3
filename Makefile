@@ -10,8 +10,11 @@ info1: # Ahsoka
 info2: # Thrawn 
 	go run informante.go thrawn
 
-fulcrum:
-	go run fulcrum.go
+fulcrumX: # para las VM sera go run fulcrum.go VM x, para la entrega cambiar eso
+	go run fulcrum.go L x
+
+fulcrum: # para las VM sera go run fulcrum.go VM
+	go run fulcrum.go L
 
 broker:
 	go run broker.go
