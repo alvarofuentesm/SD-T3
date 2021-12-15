@@ -11,16 +11,36 @@ Para ejecutar los procesos, en cada maquina:
 
 Formato: Proceso: Maquina - IP 
 
-## Leia: dist113 - 10.6.43.101
-
-```
-make leia
-```
+(Debe seguir el orden)
 
 ## Fulcrum x: dist113 - 10.6.43.101
 
 ```
-make fulcrum
+make fulcrumX
+```
+
+##  Fulcrum y: dist114 - 10.6.43.102
+
+```
+make fulcrumY
+```
+
+## Fulcrum z:  dist115 -10.6.43.103
+
+```
+make fulcrumZ
+```
+
+## broker Mos Eisley: dist116 -10.6.43.104
+
+```
+make broker
+```
+
+## Leia: dist113 - 10.6.43.101
+
+```
+make leia
 ```
 
 ## Ahsoka: dist114 -10.6.43.102
@@ -29,28 +49,10 @@ make fulcrum
 make info1
 ```
 
-##  Fulcrum y: dist114 - 10.6.43.102
-
-```
-make fulcrum
-```
-
 ## Thrawn:  dist115 -10.6.43.103
 
 ```
 make info2
-```
-
-## Fulcrum z:  dist115 -10.6.43.103
-
-```
-make fulcrum
-```
-
-## broker Mos Eisley: dist116 -10.6.43.104
-
-```
-make broker
 ```
 
 ## Ejemplo de consulta que cumple Read Your Writes

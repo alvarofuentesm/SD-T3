@@ -11,13 +11,13 @@ info2: # Thrawn
 	go run informante.go thrawn
 
 fulcrumX: # para las VM sera go run fulcrum.go VM x, para la entrega cambiar eso
-	go run fulcrum.go L x
+	go run fulcrum.go VM x
 
 fulcrumY: # para las VM sera go run fulcrum.go VM x, para la entrega cambiar eso
-	go run fulcrum.go L y
+	go run fulcrum.go VM y
 
 fulcrumZ: # para las VM sera go run fulcrum.go VM x, para la entrega cambiar eso
-	go run fulcrum.go L z
+	go run fulcrum.go VM z
 
 broker:
 	go run broker.go
