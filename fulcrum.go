@@ -52,12 +52,15 @@ func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaRepl
 	}
 	// Escribir los datos de la peticion al txt
 	str_to_write := planeta + " " + ciudad + " " + cant_rebels + "\n"
-	//bufferedWriter := bufio.NewWriter(file)
 	_, err = file.WriteString(str_to_write)
 	if err != nil {
 		log.Fatal(err)
 	}
 	file.Close()
+
+	// Escribir la orden en el log
+	logline := "AddCity " + planeta + " " + ciudad + " " + cant_rebels
+	writeLog(planeta, logline)
 
 	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
 
@@ -101,6 +104,10 @@ func (s *Server) UpdateName(ctx context.Context, in *pb.Comando) (*pb.RespuestaR
 	}
 	// basicamente "se acabo el mundo pero inmediatamente después empezó otro mundo (casi) igual"
 
+	// Escribir la orden en el log
+	logline := "UpdateName " + planeta + " " + ciudad + " " + nueva_ciudad
+	writeLog(planeta, logline)
+
 	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
 
 	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
@@ -138,6 +145,10 @@ func (s *Server) UpdateNumber(ctx context.Context, in *pb.Comando) (*pb.Respuest
 		os.Exit(1)
 	}
 
+	// Escribir la orden en el log
+	logline := "UpdateNumber " + planeta + " " + ciudad + " " + nuevo_valor
+	writeLog(planeta, logline)
+
 	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
 
 	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil
@@ -172,6 +183,10 @@ func (s *Server) DeleteCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaR
 		fmt.Println(err)
 		os.Exit(1)
 	}
+
+	// Escribir la orden en el log
+	logline := "DeleteCity " + planeta + " " + ciudad
+	writeLog(planeta, logline)
 
 	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
 
@@ -212,7 +227,6 @@ func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.Resp
 
 	// Enviarle la rpta al broker y que se lo pase a Leia
 	fmt.Println("La respuesta es:", rpta)
-
 
 	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: rpta}, nil
 }
@@ -308,6 +322,25 @@ func updateVector(planeta string) string {
 	} else {
 		return convertIntVector(aux_vector)
 	}
+}
+
+func writeLog(planeta string, linea string) {
+	// Asumir que el archivo existe y hacer append
+	file, err := os.OpenFile(planeta+"-log.txt", os.O_APPEND|os.O_WRONLY, 0666)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// Archivo no existe, crear uno
+			file, err = os.Create(planeta + "-log.txt")
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+	}
+	_, err = file.WriteString(linea + "\n")
+	if err != nil {
+		log.Fatal(err)
+	}
+	file.Close()
 }
 
 var planet_dict = make(map[string]string) // key: name of planet, value: clock vector in format "0 0 0"
