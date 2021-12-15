@@ -11,7 +11,7 @@ Para ejecutar los procesos, en cada maquina:
 
 Formato: Proceso: Maquina - IP 
 
-(Debe seguir el orden)
+(Debe seguir el orden e terminar de iniciarse los Servidores Fulcrum y Broker antes de iniciar Leia o Informantes)
 
 ## Fulcrum x: dist113 - 10.6.43.101
 
