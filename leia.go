@@ -91,20 +91,25 @@ func main() {
 		fmt.Println(rpta_final)
 		fmt.Println("Enviando...")
 
-		// ENVIAR AL BROKER
-		// BROKER RESPONDE SI ES QUE HAY ACTUALIZACIONES PARA EL PLANETA
-		// SINO, LEIA LEE DESDE SU MEMORIA QUE VA GUARDANDO (monotonic reads) ??????
-		// GUARDA SU CONSULTA EN MEMORIA JUNTO AL RELOJ DE VECTOR Y EL SERVER QUE LE RESPONDIO POR ULTIMA VEZ
-
-		response, err := c.GetNumberRebelds(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: planet_dict[planeta]})
+		response, err := c.GetNumberRebelds(context.Background(), &pb.Comando{Planeta: planeta, Ciudad: ciudad, Valor: "", Vector: planet_dict[planeta], Last: last_fulcrum})
 		if err != nil {
-			log.Fatalf("Error when calling AddCity: %s", err)
+			log.Fatalf("Error when calling GetNumberRebelds: %s", err)
 		}
-		//log.Printf("Reponse: %s", response.IP)
-		log.Printf("Reponse: ", response)
+		log.Printf("Reponse: %s", response.IP)
+		//log.Printf("Reponse: ", response)
+
+		// guardar vector
+		planet_dict[planeta] = response.Vector
+		fmt.Println(convertStringVector(planet_dict[planeta]))
+
+		last_fulcrum =  response.IP
+
+		fmt.Println("El número de rebeldes es: ", response.Valor)
+
 		
 
 		// ---------- SEGUIR EJECUTANDO ----------
+		/*
 		fmt.Println("¿Desea seguir consultando?:")
 		fmt.Println("1. Si")
 		fmt.Println("2. No")
@@ -121,6 +126,7 @@ func main() {
 		default:
 			fmt.Println("Respuesta no valida")
 		}
+		*/
 
 	}
 }

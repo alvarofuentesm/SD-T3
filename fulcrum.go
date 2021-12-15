@@ -39,7 +39,7 @@ func (s *Server) AddCity(ctx context.Context, in *pb.Comando) (*pb.RespuestaRepl
 	cant_rebels := in.GetValor()
 
 	// Asumir que el archivo existe y hacer append
-	file, err := os.OpenFile(planeta+".txt", os.O_APPEND, 0666)
+	file, err := os.OpenFile(planeta+".txt", os.O_APPEND|os.O_WRONLY, 0666)
 	if err != nil {
 		if os.IsNotExist(err) {
 			// Archivo no existe, crear uno
@@ -213,9 +213,8 @@ func (s *Server) GetNumberRebelds(ctx context.Context, in *pb.Comando) (*pb.Resp
 	// Enviarle la rpta al broker y que se lo pase a Leia
 	fmt.Println("La respuesta es:", rpta)
 
-	planet_dict[planeta] = updateVector(planeta) // Hace los calculos y hace +1 al vector dependiendo del fulcrum, si no hay vector lo crea
 
-	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: ""}, nil // AQUI VALOR DEBERIA SER LA VARIABLE rpta
+	return &pb.RespuestaReplica{Vector: planet_dict[planeta], Valor: rpta}, nil
 }
 
 // para que broker consulte los vectores
