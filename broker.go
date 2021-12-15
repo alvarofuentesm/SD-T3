@@ -583,8 +583,8 @@ func convertIntVector(string_vector []int) string {
 	return vector
 }
 
-var server_list = [3]string{":8000", ":8100", ":8200"}
-//var server_list = [3]string{":8000", ":8000", ":8000"}
+//var server_list = [3]string{":8000", ":8100", ":8200"}
+var server_list = [3]string{"10.6.43.101:8000", "10.6.43.102:8000", "10.6.43.103:8000"}
 
 func main() {
 	//var listening = true
