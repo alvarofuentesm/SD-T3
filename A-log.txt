@@ -1,2 +1,0 @@
-AddCity A B 3
-UpdateName A B C
