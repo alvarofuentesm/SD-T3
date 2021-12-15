@@ -27,7 +27,7 @@ func (s *Server) SayHello(ctx context.Context, in *pb.Message) (*pb.Message, err
 
 	// conectar con Fulcrum X
 	var conn *grpc.ClientConn
-	conn, err := grpc.Dial(":8000", grpc.WithInsecure())
+	conn, err := grpc.Dial(server_list[0], grpc.WithInsecure())
 	//conn, err := grpc.Dial("X.X.XX.XXX:8000", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %s", err)

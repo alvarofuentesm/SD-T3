@@ -79,3 +79,5 @@ make info2
 - Broker le entrega la respuesta a Leia ademas del vector del planeta consultado
 - Leia guarda en memoria la consulta que hizo, junto con su vector y el fulcrum que le respondio por ultima vez cuando pregunto por ese planeta
 - La proxima vez Leia enviará estos últimos datos al broker y los comparara con los actuales del fulcrum, si no hay cambios responderá con lo que tenia ya guardado
+
+Nota: no esta implementado el Merge
